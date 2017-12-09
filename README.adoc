@@ -7,5 +7,6 @@ image:https://travis-ci.org/DendiProject.github.io/identity-provider-service.svg
 
 
 ** {link-github-project-IPSdoc}[Link to IPS doc]
+** {link-github-project-ghpages}[Link to Github Pages]
 ** {link-demo-html}[HTML output file]
 ** {link-demo-pdf}[PDF output file]

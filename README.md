@@ -1,2 +1,0 @@
-# identity-provider-service
-IPS

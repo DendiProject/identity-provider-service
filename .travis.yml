@@ -15,7 +15,7 @@ after_failure:
   - docker logs asciidoc-to-pdf
 
 after_success:
-  - cd output ; mv README.html index.html ; cp -R ../images images
+  - cd output ; mv README.html index.html ; cp -R ../doc images
   - git init
   - git config --global  user.name "${GH_USER_NAME}"
   - git config --global  user.email "{GH_USER_EMAIL}"

@@ -9,4 +9,4 @@ image:https://travis-ci.org/DendiProject/identity-provider-service.svg?branch=ma
 ** {link-github-project-ghpages}[*Link to Github Page*]
 ** {link-github-project-IPS}[Link to IPS page]
 ** {link-demo-html}[IPS doc HTML]
-** {link-demo-pdf}[[IPS doc PDF]
+** {link-demo-pdf}[IPS doc PDF]

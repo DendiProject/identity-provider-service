@@ -11,11 +11,14 @@ script:
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 
-  - docker run -v $TRAVIS_BUILD_DIR/doc:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
-  - docker run -v $TRAVIS_BUILD_DIR/doc:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
+  - docker run -v $TRAVIS_BUILD_DIR/doc:/documents/ --name asciidoc-to-html_2 asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
+  - docker run -v $TRAVIS_BUILD_DIR/doc:/documents/ --name asciidoc-to-pdf_2 asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 after_failure:
   - docker logs asciidoc-to-html
   - docker logs asciidoc-to-pdf
+
+   - docker logs asciidoc-to-html_2
+   - docker logs asciidoc-to-pdf_2
 
 after_success:
   - cd output ; mv README.html index.html ; cp -R ../doc doc

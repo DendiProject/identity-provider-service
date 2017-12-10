@@ -2,8 +2,8 @@ image:https://travis-ci.org/DendiProject/identity-provider-service.svg?branch=ma
 
 :link-github-project-IPS: https://dendiproject.github.io/identity-provider-service
 :link-github-project-ghpages: https://dendiproject.github.io/documentation
-:link-demo-html: {link-github-project-IPS}/test_document.html
-:link-demo-pdf: {link-github-project-IPS}/test_document.pdf
+:link-demo-html: {link-github-project-IPS}/doc/test_document.html
+:link-demo-pdf: {link-github-project-IPS}/doc/test_document.pdf
 
 
 ** {link-github-project-IPS}[Link to IPS doc]

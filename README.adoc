@@ -6,7 +6,7 @@ image:https://travis-ci.org/DendiProject/identity-provider-service.svg?branch=ma
 :link-demo-pdf: {link-github-project-IPS}/test_document.pdf
 
 
-** {link-github-project-IPS}[Link to IPS doc]
 ** {link-github-project-ghpages}[Link to Github Pages]
+*** {link-github-project-IPS}[Link to IPS doc]
 ** {link-demo-html}[HTML output file]
 ** {link-demo-pdf}[PDF output file]

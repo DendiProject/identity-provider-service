@@ -8,7 +8,7 @@ before_install:
   - docker pull asciidoctor/docker-asciidoctor
 
 script:
-  - docker run -v $TRAVIS_BUILD_DIR:/documents/ asciidoctor -a toc
+  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name atoc asciidoctor/docker-asciidoctor asciidoctor -a toc
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 
@@ -20,6 +20,7 @@ after_failure:
   - docker logs readme-to-pdf
   - docker logs doc-to-html
   - docker logs doc-to-pdf
+  - docker logs atoc
 
 after_success:
   - cd output ; mv README.html index.html ; cp -R ../doc doc

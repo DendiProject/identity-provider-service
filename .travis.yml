@@ -6,12 +6,12 @@ services:
 
 before_install:
   - mkdir -p output
-  - chmod +x mvn
   - docker pull asciidoctor/docker-asciidoctor
 
 script:
-    mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    mvn install 
     mvn clean verify
+
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 

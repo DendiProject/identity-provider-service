@@ -1,6 +1,6 @@
 image:https://travis-ci.org/DendiProject/identity-provider-service.svg?branch=master["Build Status", link="https://travis-ci.org/DendiProject/identity-provider-service"]
 
-= Dendi Project
+== Dendi Project
 
 == Links
 

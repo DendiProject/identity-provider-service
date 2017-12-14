@@ -10,7 +10,6 @@ before_install:
 
 script:
     mvn clean verify
-    mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
   - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name readme-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 

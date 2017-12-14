@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.demo.DemoApplicationTests
--------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.391 sec - in com.example.demo.DemoApplicationTests
-=======
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.336 sec - in com.example.demo.DemoApplicationTests
->>>>>>> parent of 3008274... mvn package

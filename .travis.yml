@@ -22,7 +22,6 @@ after_failure:
 
 after_success:
   - cd $TRAVIS_BUILD_DIR/temp ; ls ; mv README.html index.html
-  - rm asciidoctor.css ; rm coderay-asciidoctor.css
   - mkdir doc ; mv test_document.pdf doc/test_document.pdf ; mv test_document.html doc/test_document.html
   - cd $TRAVIS_BUILD_DIR/temp/doc ; ls
   - rm asciidoctor.css ; rm coderay-asciidoctor.css

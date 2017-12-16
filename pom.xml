@@ -25,7 +25,7 @@
         <asciidoctorj.version>1.5.6</asciidoctorj.version>
         <jruby.version>1.7.26</jruby.version>
 		<java.version>1.8</java.version><asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
-
+		<outputdirectory>${output}</outputdirectory>
 	</properties>
 
 	<dependencies>
@@ -50,63 +50,148 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+			   <groupId>org.apache.maven.plugins</groupId>
+			   <artifactId>maven-resources-plugin</artifactId>
+			   <version>3.0.1</version>
+			</plugin>
 		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
-		<id>pdf</id>
+			<id>pdf</id>
+			<activation>
+	        	<activeByDefault>true</activeByDefault>
+			</activation>
+				<build>
+					<plugins>
+						<plugin>
+							<groupId>org.asciidoctor</groupId>
+	        				<artifactId>asciidoctor-maven-plugin</artifactId>
+	        				<version>1.5.6</version>
+							<dependencies>
+			                    <dependency>
+			                        <groupId>org.asciidoctor</groupId>
+			                        <artifactId>asciidoctorj-pdf</artifactId>
+	 								<version>${asciidoctorj.pdf.version}</version>
+			                    </dependency>
+			                    <dependency>
+			                        <groupId>org.jruby</groupId>
+			                        <artifactId>jruby-complete</artifactId>
+									<version>${jruby.version}</version>
+			                    </dependency>
+			                    <dependency>
+			                        <groupId>org.asciidoctor</groupId>
+			                        <artifactId>asciidoctorj</artifactId>
+									<version>${asciidoctorj.version}</version>
+			                    </dependency>
+		                	</dependencies>
+							<configuration>
+								<sourceDirectory>
+									${basedir}
+								</sourceDirectory>
+
+								<outputDirectory>
+									${basedir}/temp
+								</outputDirectory>
+
+								<resources>
+								    <resource>
+								        <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
+								        <directory>${basedir}</directory>
+								        <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+								        <targetPath>${project.build.directory}</targetPath>
+								        <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+								        <excludes>
+								            <exclude>**/.txt</exclude>
+								        </excludes>
+								        <!-- (Optional) If not set, includes all files but default exceptions mentioned -->
+
+								    </resource>
+								</resources>
+
+								<preserveDirectories>
+									true
+								</preserveDirectories>
+			                </configuration>
+							<executions>
+			                    <execution>
+			                        <id>generate-pdf-doc</id>
+			                        <phase>generate-resources</phase>
+			                        <goals>
+			                            <goal>process-asciidoc</goal>
+			                        </goals>
+			                        <configuration>
+			                            <backend>pdf</backend>
+			                            <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay' source highlighting -->
+			                            <sourceHighlighter>rouge</sourceHighlighter>
+			                        </configuration>
+			                    </execution>
+	                		</executions>
+						</plugin>
+					</plugins>
+				</build>
+		</profile>
+
+		<profile>
+			<id>html</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<plugins>
-					<plugin>
+            		<plugin>
 						<groupId>org.asciidoctor</groupId>
-        				<artifactId>asciidoctor-maven-plugin</artifactId>
-        				<version>1.5.6</version>
-						<dependencies>
-		                    <dependency>
-		                        <groupId>org.asciidoctor</groupId>
-		                        <artifactId>asciidoctorj-pdf</artifactId>
- 								<version>${asciidoctorj.pdf.version}</version>
-		                    </dependency>
-		                    <dependency>
-		                        <groupId>org.jruby</groupId>
-		                        <artifactId>jruby-complete</artifactId>
-								<version>${jruby.version}</version>
-		                    </dependency>
-		                    <dependency>
-		                        <groupId>org.asciidoctor</groupId>
-		                        <artifactId>asciidoctorj</artifactId>
-								<version>${asciidoctorj.version}</version>
-		                    </dependency>
-	                	</dependencies>
-						<configuration>
-							<sourceDirectory>
-								${basedir}/doc
-								${basedir}
-							</sourceDirectory>
-							<sourceDocumentName>
-								*.adoc
-							</sourceDocumentName>
+						    <artifactId>asciidoctor-maven-plugin</artifactId>
+						    <version>${asciidoctor.maven.plugin.version}</version>
+						    <dependencies>
+							   <!-- Comment this section to use the default jruby artifact provided by the plugin -->
+							    <dependency>
+								   <groupId>org.jruby</groupId>
+								   <artifactId>jruby-complete</artifactId>
+								   <version>${jruby.version}</version>
+							    </dependency>
+							    <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
+							    <dependency>
+								   <groupId>org.asciidoctor</groupId>
+								   <artifactId>asciidoctorj</artifactId>
+								   <version>${asciidoctorj.version}</version>
+							    </dependency>
+			   				</dependencies>
+							<configuration>
+								<sourceDirectory>
+									${basedir}
+								</sourceDirectory>
 
-							<preserveDirectories>
-								true
-							</preserveDirectories>
-
-		                </configuration>
-						<executions>
-		                    <execution>
-		                        <id>generate-pdf-doc</id>
-		                        <phase>generate-resources</phase>
-		                        <goals>
-		                            <goal>process-asciidoc</goal>
-		                        </goals>
-		                        <configuration>
-		                            <backend>pdf</backend>
-		                            <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay' source highlighting -->
-		                            <sourceHighlighter>rouge</sourceHighlighter>
-		                        </configuration>
-		                    </execution>
-                		</executions>
+								<outputDirectory>
+									${basedir}/temp
+								</outputDirectory>
+			                </configuration>
+							<executions>
+							    <execution>
+								    <id>asciidoc-to-html</id>
+								    <phase>generate-resources</phase>
+								    <goals>
+										<goal>process-asciidoc</goal>
+								    </goals>
+								    <configuration>
+                            	    	<backend>html5</backend>
+                            			<sourceHighlighter>coderay</sourceHighlighter>
+										<attributes>
+			                                <linkcss>true</linkcss>
+			                                <imagesdir>./images</imagesdir>
+											<toc>left</toc>
+			                                <icons>font</icons>
+			                                <sectanchors>true</sectanchors>
+			                                <!-- set the idprefix to blank -->
+			                                <idprefix/>
+			                                <idseparator>-</idseparator>
+			                                <docinfo1>true</docinfo1>
+			                            </attributes>
+									</configuration>
+							    </execution>
+					   		</executions>
 					</plugin>
 				</plugins>
 			</build>

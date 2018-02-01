@@ -1,11 +1,15 @@
 image:https://travis-ci.org/DendiProject/identity-provider-service.svg?branch=master["Build Status", link="https://travis-ci.org/DendiProject/identity-provider-service"]
 
 
-==API
+
+
+== Dendi Project
+
+== API
+
 /user/{name} - get user details from DB
 
 /user        - register new user
-== Dendi Project
 
 == Links
 

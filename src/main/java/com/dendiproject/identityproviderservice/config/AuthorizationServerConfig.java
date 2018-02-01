@@ -35,8 +35,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient("ClientId")
                 .secret("secret")
-                .authorizedGrantTypes("authorization_code","implicit","refresh_token", "password", "authorization_code")
-                .scopes("user_info", "openid")
+                .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
+                .scopes("user_info")
                 .autoApprove(true);
     }
 

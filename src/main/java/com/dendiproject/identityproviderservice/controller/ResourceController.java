@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
@@ -41,7 +42,7 @@ public class ResourceController {
     private UserValidator userValidator;
  
    
-    
+   
     @RequestMapping(value = "/user/{name}", method = RequestMethod.GET)
     public ResponseEntity<UserDetails> getUser(@PathVariable(value = "name")String name) 
                                                                   throws UsernameNotFoundException{
@@ -55,12 +56,12 @@ public class ResourceController {
     }
     
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Void> registration(User user, BindingResult bindingResult) {
-        userValidator.validate(user, bindingResult);
-        
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
+    public ResponseEntity<Void> registration(User user){//, BindingResult bindingResult) {
+//        userValidator.validate(user, bindingResult);
+//        
+//        if (bindingResult.hasErrors()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+//        }
         
         userService.save(user);
 

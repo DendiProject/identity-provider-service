@@ -1,93 +1,87 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.dendiproject.identityproviderservice.model;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
 import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Set;
 /**
  *
  * @author ArtemShevelyukhin
  */
 @Entity
 public class User implements UserDetails{
-    
-  
-    
-    
-    @Column(name = "user_id")
-    private int user_id;
-    
-    
+       
     @Column(name = "email")
+    @Id
     private String email;
     
-    
-    @Column(name = "first_name")
-    @Id
+    @Column(name = "firstname")
     private String name;
     
-    @Column(name = "passwd")
-    private String password;
-
+    @Column(name = "lastname")
+    private String lastname;
     
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "password")
+    private String password;
+    
+    @Column(name = "age")
+    private int age;
+    
+    @Column(name = "displayname")
+    private String displayname;
+
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinTable(name = "user_role", joinColumns =
 //    @JoinColumn(name = "user_id"), inverseJoinColumns =
 //    @JoinColumn(name = "role_id"))
 //    private Set<Role> roles;
-    
-    public int getUser_id() {
-        return user_id;
-    }
 
     public String getEmail() {
         return email;
     }
-    
-//    //ФИГНЯ
-//        
-//	public User() {
-//	}
-//
-//    public User(int user_id, String email, String name, String password) {
-//        this.user_id = user_id;
-//        this.email = email;
-//        this.name = name;
-//        this.password = password;
-//    }
 
-    //ФИГНЯ
-//    public void setUser_id(int user_id) {
-//        this.user_id = user_id;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-
-    public void setPassword(String passwd) {
-        this.password = passwd;
+    public void setEmail(String email) {
+        this.email = email;
     }
-    ///////////////////////
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public List<GrantedAuthority> getAuthorities() {
         return null;

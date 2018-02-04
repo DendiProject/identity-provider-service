@@ -5,7 +5,9 @@
  */
 package com.dendiproject.identityproviderservice.controller;
 
+import com.dendiproject.identityproviderservice.conversion.Conversion;
 import com.dendiproject.identityproviderservice.model.User;
+import com.dendiproject.identityproviderservice.model.UserDto;
 import com.dendiproject.identityproviderservice.service.MyUserDetailsService;
 import com.dendiproject.identityproviderservice.service.UserService;
 import com.dendiproject.identityproviderservice.validator.UserValidator;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,33 +41,39 @@ public class ResourceController {
     private MyUserDetailsService userDetailsService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserValidator userValidator;
- 
+    @Autowired 
+    private Conversion conversion;
+    //    @Autowired
+    //    private UserValidator userValidator;
    
    
     @RequestMapping(value = "/user/{name}", method = RequestMethod.GET)
-    public ResponseEntity<UserDetails> getUser(@PathVariable(value = "name")String name) 
-                                                                  throws UsernameNotFoundException{
-        try {
-            UserDetails userdetails = userDetailsService.loadUserByUsername(name);
-            return new ResponseEntity<>(userdetails, HttpStatus.OK);
-        }
-        catch(UsernameNotFoundException ex){
+    public ResponseEntity<UserDto> getUser(
+            @PathVariable(value = "name")String name) throws UsernameNotFoundException{
+        
+        UserDetails userdetails = userDetailsService.loadUserByUsername(name);  
+        if (userdetails == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        else{
+            UserDto UserDto = conversion.convertToDto(userdetails);
+            return new ResponseEntity<>(UserDto, HttpStatus.OK);
+        }
+       
+            
     }
     
+    
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Void> registration(User user){//, BindingResult bindingResult) {
+    public ResponseEntity<Void> registration(UserDto userDto){//, BindingResult bindingResult) {
 //        userValidator.validate(user, bindingResult);
 //        
 //        if (bindingResult.hasErrors()) {
 //            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 //        }
-        
+        System.out.println(userDto + "<---------------------");
+        User user = conversion.convertToEntity(userDto);
         userService.save(user);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

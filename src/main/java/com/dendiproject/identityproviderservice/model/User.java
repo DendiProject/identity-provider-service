@@ -12,7 +12,11 @@ import java.util.Set;
  */
 @Entity
 public class User implements UserDetails{
-       
+    
+    @Column(name = "id")
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    private long id;
+    
     @Column(name = "email")
     @Id
     private String email;
@@ -26,11 +30,13 @@ public class User implements UserDetails{
     @Column(name = "password")
     private String password;
     
+    @Column(name = "displayname")
+    private String displayname;
+    
     @Column(name = "age")
     private int age;
     
-    @Column(name = "displayname")
-    private String displayname;
+   
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinTable(name = "user_role", joinColumns =

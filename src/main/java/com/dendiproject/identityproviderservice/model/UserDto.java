@@ -5,9 +5,6 @@
  */
 package com.dendiproject.identityproviderservice.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 /**
  *
  * @author ArtemShevelyukhin
@@ -17,6 +14,7 @@ public class UserDto
     private String email;
     private String name;
     private String displayname;
+    private String password;
 
     public String getEmail() {
         return email;
@@ -41,5 +39,14 @@ public class UserDto
     public void setDisplayname(String displayname) {
         this.displayname = displayname;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     
 } 

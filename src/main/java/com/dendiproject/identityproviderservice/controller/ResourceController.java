@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,22 +59,21 @@ public class ResourceController {
         else{
             UserDto UserDto = conversion.convertToDto(userdetails);
             return new ResponseEntity<>(UserDto, HttpStatus.OK);
-        }
-       
-            
+        }        
     }
     
     
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Void> registration(UserDto userDto){//, BindingResult bindingResult) {
+    public ResponseEntity<Void> registration(@RequestBody UserDto userDto){//, BindingResult bindingResult) {
 //        userValidator.validate(user, bindingResult);
 //        
 //        if (bindingResult.hasErrors()) {
 //            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 //        }
-        System.out.println(userDto + "<---------------------");
         User user = conversion.convertToEntity(userDto);
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+   
 }

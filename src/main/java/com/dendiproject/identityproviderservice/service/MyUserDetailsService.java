@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @author ArtemShevelyukhin
  */
 @Service
-public class MyUserDetailsService implements UserDetailsService{
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired  
     private UserRepository userRepository;
@@ -28,12 +28,11 @@ public class MyUserDetailsService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findOne(username);
+        if (user == null) {
+                throw new UsernameNotFoundException(username);
+        }
 
-//		if (user == null) {
-//			throw new UsernameNotFoundException(username);
-//		}
-
-		return user;
+        return user;
     }
     
 }

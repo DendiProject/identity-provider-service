@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
-import java.util.Set;
+import org.hibernate.annotations.GenericGenerator;
 /**
  *
  * @author ArtemShevelyukhin
@@ -14,11 +14,12 @@ import java.util.Set;
 public class User implements UserDetails{
     
     @Column(name = "id")
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Id
+    private String id;
     
     @Column(name = "email")
-    @Id
     private String email;
     
     @Column(name = "firstname")
@@ -88,6 +89,14 @@ public class User implements UserDetails{
         this.password = password;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
     @Override
     public List<GrantedAuthority> getAuthorities() {
         return null;

@@ -8,7 +8,7 @@ package com.dendiproject.identityproviderservice.controller;
 import com.dendiproject.identityproviderservice.conversion.Conversion;
 import com.dendiproject.identityproviderservice.model.User;
 import com.dendiproject.identityproviderservice.model.UserDto;
-import com.dendiproject.identityproviderservice.service.MyUserDetailsService;
+import com.dendiproject.identityproviderservice.repository.UserRepository;
 import com.dendiproject.identityproviderservice.service.UserService;
 import com.dendiproject.identityproviderservice.validator.UserValidator;
 
@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,26 +39,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class ResourceController {
     
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+//    @Autowired
+//    private UserDetailsService userDetailsService;
     @Autowired
     private UserService userService;
     @Autowired 
     private Conversion conversion;
+    @Autowired
+    private UserRepository userRepository;
     //    @Autowired
     //    private UserValidator userValidator;
    
    
-    @RequestMapping(value = "/user/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser(
-            @PathVariable(value = "name")String name) throws UsernameNotFoundException{
+            @PathVariable(value = "id")String id) throws UsernameNotFoundException{
         
-        UserDetails userdetails = userDetailsService.loadUserByUsername(name);  
-        if (userdetails == null){
+        User user = userService.findByUsername(id);//userDetailsService.loadUserByUsername(name);  
+        if (user == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else{
-            UserDto UserDto = conversion.convertToDto(userdetails);
+            UserDto UserDto = conversion.convertToDto(user);
             return new ResponseEntity<>(UserDto, HttpStatus.OK);
         }        
     }
@@ -75,5 +78,19 @@ public class ResourceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody UserDto userDto, @PathVariable(value = "id")String id){
+        try{
+            User user = conversion.convertToEntity(userDto);
+            user.setId(id);
+            userRepository.getOne(user.getId());
+            userService.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        
+        catch(org.springframework.orm.jpa.JpaObjectRetrievalFailureException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
    
 }

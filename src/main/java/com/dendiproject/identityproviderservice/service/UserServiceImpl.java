@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,13 +15,21 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
    
     @Override
-    public void save(User user) {
-       
+    @Transactional
+    public void save(User user) {   
         userRepository.save(user);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findOne(username);
+    public User findByUsername(String name) {
+        return userRepository.findOne(name);
     }
+
+//    @Override
+//    public void updateUserDetails(User user) {
+//        User u = userRepository.getOne(user.getId());
+//        
+//    }
+
 }
+

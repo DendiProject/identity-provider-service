@@ -79,15 +79,16 @@ public class ResourceController {
     }
     
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> update(@RequestBody UserDto userDto, @PathVariable(value = "id")String id){
+    public ResponseEntity<Void> update(
+            @RequestBody UserDto userDto, @PathVariable(value = "id")String id){
         try{
             User user = conversion.convertToEntity(userDto);
             user.setId(id);
-            userRepository.getOne(user.getId());
+            User old = userRepository.getOne(id); 
+            user.setPassword(old.getPassword());
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        
+        }       
         catch(org.springframework.orm.jpa.JpaObjectRetrievalFailureException ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

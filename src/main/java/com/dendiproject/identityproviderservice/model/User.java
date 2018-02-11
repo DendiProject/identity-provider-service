@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author ArtemShevelyukhin
  */
 @Entity
+@Table(name = "userdetails")
 public class User implements UserDetails{
     
     @Column(name = "id")

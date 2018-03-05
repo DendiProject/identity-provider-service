@@ -14,12 +14,15 @@ import com.dendiproject.identityproviderservice.validator.UserValidator;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,12 +44,16 @@ public class ResourceController {
     
 //    @Autowired
 //    private UserDetailsService userDetailsService;
+   
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
     @Autowired 
     private Conversion conversion;
     @Autowired
     private UserRepository userRepository;
+    
     //    @Autowired
     //    private UserValidator userValidator;
    
@@ -66,31 +73,35 @@ public class ResourceController {
     }
     
     
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<Void> registration(@RequestBody UserDto userDto){//, BindingResult bindingResult) {
-//        userValidator.validate(user, bindingResult);
-//        
-//        if (bindingResult.hasErrors()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-//        }
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<Void> registration(@RequestBody UserDto userDto){
+        
+        
         User user = conversion.convertToEntity(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
+        
+        
+        
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+
+    
     
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(
             @RequestBody UserDto userDto, @PathVariable(value = "id")String id){
-        try{
-            User user = conversion.convertToEntity(userDto);
-            user.setId(id);
-            User old = userRepository.getOne(id); 
-            user.setPassword(old.getPassword());
-            userService.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }       
-        catch(org.springframework.orm.jpa.JpaObjectRetrievalFailureException ex){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                try{
+                User user = conversion.convertToEntity(userDto);
+                user.setId(id);
+                User old = userRepository.getOne(id); 
+                user.setPassword(old.getPassword());
+                userService.save(user);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }       
+                catch(org.springframework.orm.jpa.JpaObjectRetrievalFailureException ex){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
    

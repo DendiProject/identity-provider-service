@@ -36,8 +36,9 @@ public class User implements UserDetails{
     private String displayname;
     
     @Column(name = "age")
-    private int age;
+    private String age;
     
+   
    
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -70,11 +71,11 @@ public class User implements UserDetails{
         this.lastname = lastname;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -97,6 +98,9 @@ public class User implements UserDetails{
     public void setId(String id) {
         this.id = id;
     }
+
+  
+    
     
     @Override
     public List<GrantedAuthority> getAuthorities() {

@@ -1,6 +1,7 @@
 package com.dendiproject.identityproviderservice.config;
 
 
+import com.dendiproject.identityproviderservice.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,33 +20,31 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+   
+//    @Autowired
+//    private ClientDetailsService clientDetailsService;
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private final  AuthenticationManager authenticationManager;
     @Autowired
-    private ClientDetailsService clientDetailsService;
+    private final  AppConfig appConfig;
+    
+    @Autowired
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, AppConfig appConfig) {
+        this.authenticationManager = authenticationManager;
+        this.appConfig = appConfig;
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 
-        security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+        security.checkTokenAccess("permitAll()");
     }
 
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-                .inMemory()
-                .withClient("browser")
-                .secret("secret")
-                .authorizedGrantTypes("client_credentials", "refresh_token", "password")
-                .scopes("ui")
-                .autoApprove(true)
-        .and()
-                .withClient("some-service")
-                .secret("secret")
-                .authorizedGrantTypes("client_credentials", "refresh_token")
-                .scopes("server");
+        clients.jdbc(appConfig.dataSource());
+                
     }
 
 
@@ -53,22 +52,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         endpoints.authenticationManager(authenticationManager)
-                .accessTokenConverter(jwtAccessTokenConverter())
-                .tokenStore(tokenStore());
+                .tokenStore(appConfig.tokenStore());
     }
     
-    //JWT
+
     
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
     
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
-        return converter;
-    }
 }

@@ -24,20 +24,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //    @Autowired
 //    private ClientDetailsService clientDetailsService;
     @Autowired
-    private final  AuthenticationManager authenticationManager;
+    private   AuthenticationManager authenticationManager;
     @Autowired
-    private final  AppConfig appConfig;
+    private   AppConfig appConfig;
     
-    @Autowired
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, AppConfig appConfig) {
-        this.authenticationManager = authenticationManager;
-        this.appConfig = appConfig;
-    }
+  
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 
-        security.checkTokenAccess("permitAll()");
+        security.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("permitAll()");
     }
 
 
@@ -54,8 +51,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(appConfig.tokenStore());
     }
-    
-
-    
     
 }

@@ -16,4 +16,8 @@ INSERT INTO oauth_client_details(
 
 INSERT INTO userdetails(
             id, email, password)
-    VALUES ('1', 'Artem', 'pass');
+    VALUES ('1', 'guest', 'guestpass');
+
+INSERT INTO userdetails(
+            id, email, password)
+    VALUES ('2', 'Artem', 'pass');

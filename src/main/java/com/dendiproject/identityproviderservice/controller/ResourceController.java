@@ -5,6 +5,7 @@
  */
 package com.dendiproject.identityproviderservice.controller;
 
+import com.dendiproject.identityproviderservice.JWTHandler;
 import com.dendiproject.identityproviderservice.conversion.Conversion;
 import com.dendiproject.identityproviderservice.model.User;
 import com.dendiproject.identityproviderservice.model.UserDto;
@@ -33,6 +34,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import io.jsonwebtoken.impl.crypto.MacProvider;
+import io.jsonwebtoken.*;
+import java.io.UnsupportedEncodingException;
+import java.security.Key;
+import java.time.Instant;
+import java.util.Date;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.CookieValue;
 
 /**
  *
@@ -53,10 +63,17 @@ public class ResourceController {
     private Conversion conversion;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JWTHandler handler;
     
     //    @Autowired
     //    private UserValidator userValidator;
-   
+    
+    @RequestMapping(value = "/private", method = RequestMethod.GET)
+    public String test(){
+        System.out.println("TEST");
+        return "TEST_RETURN";
+    }
    
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser(
@@ -79,16 +96,12 @@ public class ResourceController {
         
         User user = conversion.convertToEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.save(user);
-        
-        
+        System.err.println(user);
+        userService.save(user); 
         
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
-
-    
-    
+      
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(
             @RequestBody UserDto userDto, @PathVariable(value = "id")String id){
@@ -105,4 +118,48 @@ public class ResourceController {
         }
     }
    
+    
+    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
+    public ResponseEntity<String> authorization(@RequestBody UserDto userDto
+            ,HttpServletResponse response){
+        
+        User user = conversion.convertToEntity(userDto);//user пришел с почтой и паролем
+        User userDB = userRepository.findByEmail(user.getEmail());//userDetailsService.loadUserByUsername(name);  
+        if (userDB != null){
+            String subject;
+            if (userDB.getEmail().equals("guest")){
+                subject = "GUEST";
+            }
+            else{
+                subject = "USER";
+            }
+            
+            //Key key = MacProvider.generateKey();
+            
+            String jwtToken = handler
+                                .createJWT("IDP", subject, userDB.getId(), userDB.getId(), "test");
+          
+//            String jwtToken = Jwts.builder()
+//                    .setIssuer("IDP")
+//                    .setSubject(subject)
+//                    .setIssuedAt(Date.from(Instant.now()))
+//                    .setExpiration(Date.from(Instant.now().plusSeconds(300)))
+//                    .claim("id",userDB.getId())
+//                    .claim("email",userDB.getId())
+//                    .signWith(SignatureAlgorithm.HS512, "testkey")
+//                    .compact();
+            
+            
+            Cookie userInfo = new Cookie("userInfo", jwtToken);
+            response.addCookie(userInfo);
+            
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+          
+            return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
+        }    
+    }
+    
+  
 }

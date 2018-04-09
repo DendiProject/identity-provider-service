@@ -24,7 +24,7 @@ public class Conversion {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
-}
+    }
     
     public UserDto convertToDto(UserDetails user){
         

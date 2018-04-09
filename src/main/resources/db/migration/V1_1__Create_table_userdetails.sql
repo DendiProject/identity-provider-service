@@ -8,21 +8,6 @@
  * Created: 11.02.2018
  */
 
-CREATE TABLE userdetails
-(
-  id character varying(255),
-  email character varying(255) NOT NULL,
-  firstname character varying(255),
-  lastname character varying(255),
-  password character varying(255) NOT NULL,
-  displayname character varying(255),
-  age character varying(255),
-  CONSTRAINT user_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
-);
-
 
 CREATE TABLE oauth_client_details
 (
@@ -64,7 +49,7 @@ ALTER TABLE oauth_client_token
 
 CREATE TABLE oauth_access_token
 (
-  token_id character varying(255),
+  token_id character varying(255) UNIQUE,
   token bytea,
   authentication_id character varying(255) NOT NULL,
   user_name character varying(255),
@@ -121,6 +106,23 @@ ALTER TABLE oauth_approvals
   OWNER TO postgres;
 
 
+
+CREATE TABLE userdetails
+(
+  id character varying(255) NOT NULL,
+  email character varying(255) NOT NULL,
+  firstname character varying(255) ,
+  lastname character varying(255),
+  password character varying(255) NOT NULL,
+  displayname character varying(255),
+  age character varying(10),
+  CONSTRAINT user_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+
+/*
 CREATE TABLE ClientDetails
 (
   appId character varying(255) NOT NULL,
@@ -141,3 +143,4 @@ WITH (
 );
 ALTER TABLE ClientDetails
   OWNER TO postgres;
+*/

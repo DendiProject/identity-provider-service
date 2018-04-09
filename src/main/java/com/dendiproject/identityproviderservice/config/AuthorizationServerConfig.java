@@ -33,8 +33,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 
-        security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("permitAll()");
+        security
+                .checkTokenAccess("isAuthenticated()");
+                
     }
 
 
@@ -49,7 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         endpoints.authenticationManager(authenticationManager)
-                .tokenStore(appConfig.tokenStore());
+              .tokenStore(appConfig.tokenStore());
     }
     
 }

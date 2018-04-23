@@ -11,25 +11,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
-   
-    @Override
-    @Transactional
-    public void save(User user) {   
-        userRepository.save(user);
-    }
 
-    @Override
-    public User findByUsername(String name) {
-        return userRepository.getOne(name);
-    }
+  @Autowired
+  private UserRepository userRepository;
+
+  @Override
+  @Transactional
+  public void save(User user) {
+    userRepository.save(user);
+  }
+
+  @Override
+  public User findByUsername(String name) {
+    return userRepository.getOne(name);
+  }
 
 //    @Override
 //    public void updateUserDetails(User user) {
 //        User u = userRepository.getOne(user.getId());
 //        
 //    }
-
 }
-

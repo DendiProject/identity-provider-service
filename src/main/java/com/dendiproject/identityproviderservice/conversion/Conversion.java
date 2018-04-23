@@ -20,19 +20,19 @@ import org.springframework.stereotype.Service;
  */
 @Configuration
 public class Conversion {
-    
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-    
-    public UserDto convertToDto(UserDetails user){
-        
-        return modelMapper().map(user, UserDto.class); 
-    }
-    
-    public User convertToEntity(UserDto userDto){
-        
-        return modelMapper().map(userDto, User.class);
-    }
+
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
+
+  public UserDto convertToDto(UserDetails user) {
+
+    return modelMapper().map(user, UserDto.class);
+  }
+
+  public User convertToEntity(UserDto userDto) {
+
+    return modelMapper().map(userDto, User.class);
+  }
 }

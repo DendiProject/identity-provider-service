@@ -1,6 +1,5 @@
 package com.dendiproject.identityproviderservice.config;
 
-
 import com.dendiproject.identityproviderservice.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,43 +12,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @EnableResourceServer
 @Configuration
-public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-//   @Autowired
-//    private AuthenticationManager authenticationManager;
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-   @Autowired
-   private UserDetailsService userDetailsService;
-    
-    @Autowired
-    private   AppConfig appConfig;
-     
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
 
-        http
-               .authorizeRequests()
-                .antMatchers("/")
-                .permitAll()
-                .antMatchers("/private").authenticated();                                           //<--Для теста
-    }
+    http
+            .authorizeRequests()
+            .antMatchers("/").permitAll()
+            .antMatchers("/idpsecure/**").authenticated()
+            .and()
+            .csrf().disable();                                           //<--Для теста
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+  }
 
-        auth.jdbcAuthentication().dataSource(appConfig.dataSource());//userDetailsService(userDetailsService);
-                
-    }
-    
-    
-    
 }

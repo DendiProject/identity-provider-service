@@ -2,12 +2,11 @@ package com.dendiproject.identityproviderservice.service;
 
 import com.dendiproject.identityproviderservice.model.User;
 
-
-
 public interface UserService {
-    void save(User user);
 
-    User findByUsername(String name);
-    
-   // void updateUserDetails(User user);
+  void save(User user);
+
+  User findByUsername(String name);
+
+  // void updateUserDetails(User user);
 }

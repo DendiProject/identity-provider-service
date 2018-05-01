@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -44,5 +45,10 @@ public class AppConfig {
   @Bean
   public TokenStore tokenStore() {
     return new JdbcTokenStore(dataSource());
+  }
+
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
   }
 }

@@ -12,45 +12,29 @@ import com.dendiproject.identityproviderservice.model.UserDto;
 import com.dendiproject.identityproviderservice.repository.UserRepository;
 import com.dendiproject.identityproviderservice.service.UserService;
 import com.dendiproject.identityproviderservice.validator.UserValidator;
-
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import io.jsonwebtoken.impl.crypto.MacProvider;
-import io.jsonwebtoken.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Key;
-import java.time.Instant;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.http.HttpResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -74,15 +58,17 @@ public class ResourceController {
   private UserRepository userRepository;
   @Autowired
   private JWTHandler handler;
-
   @Autowired
-  private UserValidator userValidator;
+  private RestTemplate restTemplate;
 
+//  @Autowired
+//  private UserValidator userValidator;
   @RequestMapping(value = "/checkUiToken", method = RequestMethod.GET)
   public String checkUiToken() {
     System.out.println(tokenStore.findTokensByClientId("ui"));
     return "private";
   }
+
   @RequestMapping(value = "/checkCMToken", method = RequestMethod.GET)
   public String checkCMToken() {
     System.out.println(tokenStore.findTokensByClientId("contentmanager"));
@@ -169,7 +155,7 @@ public class ResourceController {
       return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
     }
   }
-  
+
 //  @RequestMapping(value = "/verifyToken", method = RequestMethod.POST)
 //  public ResponseEntity<String> verifyToken(
 //          @RequestHeader ("secureToken") String secureToken,
@@ -186,37 +172,39 @@ public class ResourceController {
 //      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 //    }
 //  }
-  
   @RequestMapping(value = "/verifyToken", method = RequestMethod.POST)
-  public ResponseEntity<String> verifyToken(@RequestHeader ("secureToken") String secureToken, HttpServletResponse response){
+  public ResponseEntity<String> verifyToken(@RequestHeader("secureToken") String secureToken, HttpServletResponse response) {
     ResponseEntity result = null;
+
+//    String url = "http://localhost:8181/idpsecure/checkToken" + "?access_token=" + secureToken;
+//    ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.GET, result, String.class);
     try {
-      
       URL url = new URL(
-              "http://localhost:8182/idpsecure/checkToken" + "?access_token=" + secureToken);
+              "http://localhost:8181/idpsecure/checkToken" + "?access_token=" + secureToken);
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");
       con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
       con.setDoOutput(true);
-
+      System.out.println("responseCode =  " + con.getResponseCode());
       int responseCode = con.getResponseCode();
-      System.out.println("responseCode =  " + responseCode);
-      if (responseCode == 200){
-        result =  new  ResponseEntity<>(HttpStatus.OK);
-      }
-      else {
-        result =  new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+      if (responseCode == 200) {
+        result = new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        result = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
       }
 
     } catch (MalformedURLException ex) {
       Logger.getLogger(ResourceController.class.getName()).log(Level.SEVERE, null, ex);
     } catch (IOException ex) {
       Logger.getLogger(ResourceController.class.getName()).log(Level.SEVERE, null, ex);
-    } 
+
+    }
     return result;
   }
-  
+
   @RequestMapping(value = "/checkToken", method = RequestMethod.GET)
-  public void checkToken(){ 
+  public ResponseEntity<Void> checkToken() {
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

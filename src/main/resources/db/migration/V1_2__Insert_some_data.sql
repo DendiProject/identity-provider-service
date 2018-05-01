@@ -10,9 +10,12 @@
 
 /** Oauth - populate the oauth_client_details table */
 INSERT INTO oauth_client_details(
-            client_id, client_secret, scope, authorized_grant_types)
-    VALUES ('ui', 'uipass', 'read','client_credentials') ;
+            client_id, client_secret, scope, authorized_grant_types, access_token_validity )
+    VALUES ('ui', 'uipass', 'read','client_credentials', '300') ;
 
+INSERT INTO oauth_client_details(
+            client_id, client_secret, scope, authorized_grant_types, access_token_validity )
+    VALUES ('cm', 'cmpass', 'read','client_credentials', '300') ;
 
 INSERT INTO userdetails(
             id, email, password)

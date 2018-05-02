@@ -141,10 +141,9 @@ public class ResourceController {
       } else {
         subject = "USER";
       }
-
       //Key key = MacProvider.generateKey();
       String jwtToken = handler
-              .createJWT("IDP", subject, userDB.getId(), userDB.getId(), "test");
+              .createJWT("IDP", subject, userDB.getId(), "test");
 
       Cookie userInfo = new Cookie("userInfo", jwtToken);
       response.addCookie(userInfo);

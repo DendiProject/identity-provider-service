@@ -20,14 +20,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class JWTHandler {
 
-  public String createJWT(String issuer, String subject, String id, String email, String key) {
+  public String createJWT(String issuer, String subject, String id, String key) {
 
     JwtBuilder builder = Jwts.builder()
             .setId(id)
             .setIssuer(issuer)
             .setSubject(subject)
             .setIssuedAt(Date.from(Instant.now()))
-            .setExpiration(Date.from(Instant.now().plusSeconds(300)))
             .signWith(SignatureAlgorithm.HS512, key);
 
     return builder.compact();

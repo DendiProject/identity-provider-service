@@ -103,19 +103,23 @@ public class ResourceController {
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   public ResponseEntity<Void> registration(@RequestBody UserDto userDto) {
-
     User user = conversion.convertToEntity(userDto);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    System.out.println(user);
-    userService.save(user);
-    System.out.println("регистрация завершена");
-    return new ResponseEntity<>(HttpStatus.OK);
-
+    User check = userRepository.findByEmail(user.getEmail());// <--DELETE
+    if (check == null) {
+      userService.save(user);
+      System.out.println("регистрация завершена");
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
   }
 
   @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
   public ResponseEntity<Void> update(
-          @RequestBody UserDto userDto, @PathVariable(value = "id") String id) {
+          @RequestBody UserDto userDto,
+          @PathVariable(value = "id") String id
+  ) {
     try {
       User user = conversion.convertToEntity(userDto);
       user.setId(id);
@@ -130,7 +134,8 @@ public class ResourceController {
 
   @RequestMapping(value = "/authorization", method = RequestMethod.POST)
   public ResponseEntity<String> authorization(@RequestBody UserDto userDto,
-          HttpServletResponse response) {
+          HttpServletResponse response
+  ) {
 
     User user = conversion.convertToEntity(userDto);//user пришел с почтой и паролем
     User userDB = userRepository.findByEmail(user.getEmail());
@@ -151,7 +156,7 @@ public class ResourceController {
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
 
-      return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>("ERROR", HttpStatus.CONFLICT);
     }
   }
 
@@ -172,7 +177,8 @@ public class ResourceController {
 //    }
 //  }
   @RequestMapping(value = "/verifyToken", method = RequestMethod.POST)
-  public ResponseEntity<String> verifyToken(@RequestHeader("secureToken") String secureToken, HttpServletResponse response) {
+  public ResponseEntity<String> verifyToken(@RequestHeader("secureToken") String secureToken, HttpServletResponse response
+  ) {
     ResponseEntity result = null;
 
 //    String url = "http://localhost:8181/idpsecure/checkToken" + "?access_token=" + secureToken;

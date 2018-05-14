@@ -63,29 +63,6 @@ public class ResourceController {
 
 //  @Autowired
 //  private UserValidator userValidator;
-  @RequestMapping(value = "/checkUiToken", method = RequestMethod.GET)
-  public String checkUiToken() {
-    System.out.println(tokenStore.findTokensByClientId("ui"));
-    return "private";
-  }
-
-  @RequestMapping(value = "/checkCMToken", method = RequestMethod.GET)
-  public String checkCMToken() {
-    System.out.println(tokenStore.findTokensByClientId("contentmanager"));
-    return "private";
-  }
-
-  @RequestMapping(value = "/private/someinfo", method = RequestMethod.GET)
-  public String test() {
-    System.out.println("private");
-    return "private";
-  }
-
-  @RequestMapping(value = "/unprivate/someinfo", method = RequestMethod.GET)
-  public String test2() {
-    System.out.println("no_private");
-    return "no_private";
-  }
   /////
 
   @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)

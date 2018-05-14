@@ -5,6 +5,8 @@
  */
 package com.dendiproject.identityproviderservice.model;
 
+import java.util.Date;
+
 /**
  *
  * @author ArtemShevelyukhin
@@ -17,8 +19,9 @@ public class UserDto {
   private String lastname;
   private String password;
   private String displayname;
-  private String age;
-
+  private Date age;
+  private String info;
+  
   public String getId() {
     return id;
   }
@@ -67,12 +70,22 @@ public class UserDto {
     this.displayname = displayname;
   }
 
-  public String getAge() {
+  public Date getAge() {
     return age;
   }
 
-  public void setAge(String age) {
+  public void setAge(Date age) {
     this.age = age;
   }
+
+  public String getInfo() {
+    return info;
+  }
+
+  public void setInfo(String info) {
+    this.info = info;
+  }
+  
+  
 
 }

@@ -1,5 +1,6 @@
 package com.dendiproject.identityproviderservice.model;
 
+import java.util.Date;
 import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +37,11 @@ public class User implements UserDetails {
   @Column(name = "displayname")
   private String displayname;
 
-  @Column(name = "age")
-  private String age;
+  @Column(name = "age",  columnDefinition = "DATE")
+  private Date age;
+  
+  @Column(name = "info")
+  private String info;
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinTable(name = "user_role", joinColumns =
@@ -68,11 +72,11 @@ public class User implements UserDetails {
     this.lastname = lastname;
   }
 
-  public String getAge() {
+  public Date getAge() {
     return age;
   }
 
-  public void setAge(String age) {
+  public void setAge(Date age) {
     this.age = age;
   }
 
@@ -96,6 +100,16 @@ public class User implements UserDetails {
     this.id = id;
   }
 
+  public String getInfo() {
+    return info;
+  }
+
+  public void setInfo(String info) {
+    this.info = info;
+  }
+  
+  
+  
   @Override
   public List<GrantedAuthority> getAuthorities() {
     return null;

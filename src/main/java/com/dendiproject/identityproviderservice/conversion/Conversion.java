@@ -7,6 +7,7 @@ package com.dendiproject.identityproviderservice.conversion;
 
 import com.dendiproject.identityproviderservice.model.User;
 import com.dendiproject.identityproviderservice.model.UserDto;
+import com.dendiproject.identityproviderservice.model.UserInfoDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,5 +35,10 @@ public class Conversion {
   public User convertToEntity(UserDto userDto) {
 
     return modelMapper().map(userDto, User.class);
+  }
+  
+   public UserInfoDto convertUserToUserInfoDtoDto(UserDetails user) {
+
+    return modelMapper().map(user, UserInfoDto.class);
   }
 }

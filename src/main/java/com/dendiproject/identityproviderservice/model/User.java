@@ -42,6 +42,9 @@ public class User implements UserDetails {
   
   @Column(name = "info")
   private String info;
+  
+  @Column(name = "picture_id")
+  private String picture_id;
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinTable(name = "user_role", joinColumns =
@@ -107,6 +110,15 @@ public class User implements UserDetails {
   public void setInfo(String info) {
     this.info = info;
   }
+
+  public String getPicture_id() {
+    return picture_id;
+  }
+
+  public void setPicture_id(String picture_id) {
+    this.picture_id = picture_id;
+  }
+  
   
   
   

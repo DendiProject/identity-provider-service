@@ -117,6 +117,7 @@ CREATE TABLE userdetails
   displayname character varying(255),
   age date,
   info character varying(4096),
+  picture_id character varying(255),
   CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 WITH (

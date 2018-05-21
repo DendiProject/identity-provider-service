@@ -64,7 +64,6 @@ public class ResourceController {
 //  @Autowired
 //  private UserValidator userValidator;
   /////
-
   @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
   public ResponseEntity<UserDto> getUser(
           @PathVariable(value = "id") String id) throws UsernameNotFoundException {
@@ -132,9 +131,37 @@ public class ResourceController {
 
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
-
       return new ResponseEntity<>("ERROR", HttpStatus.CONFLICT);
     }
+  }
+
+  @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
+  public ResponseEntity<String> saveUserData(@RequestBody UserDto userDto,
+          HttpServletResponse response) {
+    User user = conversion.convertToEntity(userDto);
+    User userDB = userRepository.getOne(userDto.getId());
+    user.setPassword(userDB.getPassword());
+    // checkForNull(user, userDB);
+    if (user != null) {
+      userService.save(user);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+  }
+
+  @RequestMapping(value = "/getUserData", method = RequestMethod.POST)
+  public  ResponseEntity<UserDto> getUserData(@RequestHeader String  id,
+          HttpServletResponse response) {
+    User userDB = userRepository.getOne(id);
+    UserDto user = null;
+    if (userDB != null) {
+       user = conversion.convertToDto(userDB);
+      
+     return new ResponseEntity<>(user, HttpStatus.OK);
+    } 
+    return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+
   }
 
 //  @RequestMapping(value = "/verifyToken", method = RequestMethod.POST)
@@ -188,5 +215,20 @@ public class ResourceController {
   @RequestMapping(value = "/checkToken", method = RequestMethod.GET)
   public ResponseEntity<Void> checkToken() {
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  private void checkForNull(User user, User userDB) {
+    if ("".equals(user.getName())) {
+      user.setName(userDB.getName());
+    }
+    if ("".equals(user.getLastname())) {
+      user.setLastname(userDB.getLastname());
+    }
+    if ("".equals(user.getEmail())) {
+      user.setEmail(userDB.getEmail());
+    }
+    if ("".equals(user.getInfo())) {
+      user.setInfo(userDB.getInfo());
+    }
   }
 }

@@ -21,6 +21,7 @@ public class UserDto {
   private String displayname;
   private Date age;
   private String info;
+  private String picture_id;
   
   public String getId() {
     return id;
@@ -85,6 +86,15 @@ public class UserDto {
   public void setInfo(String info) {
     this.info = info;
   }
+
+  public String getPicture_id() {
+    return picture_id;
+  }
+
+  public void setPicture_id(String picture_id) {
+    this.picture_id = picture_id;
+  }
+  
   
   
 
